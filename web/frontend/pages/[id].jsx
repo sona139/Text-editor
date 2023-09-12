@@ -202,7 +202,7 @@ const PageDetail = () => {
 						title={title}
 						backAction={{
 							onAction: () => {
-								if (title === oldTitle && content === content) {
+								if (title === oldTitle && content === oldContent) {
 									navigate("/");
 								} else {
 									handleChangeConfirmModal({

@@ -389,7 +389,7 @@ const ContentFormater = ({ content = "", handleChangeContent }) => {
 						onBlur={(e) => {
 							e.target.style.borderColor = "#ccc";
 						}}
-						onKeyDown={(e) => handleChangeContent(e.target.innerHTML)}
+						onKeyUp={(e) => handleChangeContent(e.target.innerHTML)}
 					></div>
 				</LegacyCard.Subsection>
 			</LegacyCard>

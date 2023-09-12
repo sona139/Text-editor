@@ -66,6 +66,7 @@ const Pages = () => {
 		url: `/api/pages?published_status=${visibility === "visible"}`,
 		reactQueryOptions: {
 			onSuccess: (res) => {
+				console.log("re-fetch");
 				let newPages = res.data;
 
 				// Filter search
@@ -171,29 +172,36 @@ const Pages = () => {
 	// Handle change query value
 	const handleChangeQuery = useCallback(
 		(value) => {
-			setIsLoading(true);
 			setQuery(value);
+		},
+		[tabs]
+	);
+
+	// Fecth api after 500ms when query value change
+	useEffect(() => {
+		const id = setTimeout(() => {
+			setIsLoading(true);
+
 			if (tabs.length === 1) {
 				const newTab = { id: "custom-search", content: "Custom search" };
 				setTabs((prev) => [...prev, newTab]);
 				setTabSelected(1);
 				setIsFocus(true);
-			} else if (!value.trim()) {
+			} else if (!query.trim()) {
 				if (tabs.length !== 1) {
 					setTabs((prev) => prev.slice(0, -1));
 					setTabSelected(0);
 				}
 			}
 
-			const id = setTimeout(() => {
-				refetch();
-			}, []);
-			return () => {
-				clearTimeout(id);
-			};
-		},
-		[tabs]
-	);
+			refetch();
+		}, 500);
+
+		return () => {
+			clearTimeout(id);
+			setIsLoading(false);
+		};
+	}, [query]);
 
 	// Handle remove query value
 	const handleRemoveQuery = useCallback(() => {
